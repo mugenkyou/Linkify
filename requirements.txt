@@ -1,0 +1,4 @@
+flask==2.3.2
+selenium==4.11.2
+werkzeug==2.3.3
+gunicorn==21.2.0 

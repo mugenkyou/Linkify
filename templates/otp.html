@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}OTP Verification - Linkify{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2 class="card-title">Verification</h2>
+    <p class="otp-subtitle">Enter the code sent to your device</p>
+    
+    <div class="otp-icon">
+        <i class="fas fa-shield-alt"></i>
+    </div>
+    
+    <form id="otpForm" class="otp-form">
+        <div class="form-group">
+            <div class="input-icon-wrapper">
+                <i class="fas fa-key input-icon"></i>
+                <input type="text" name="otp" class="form-input" placeholder="Enter OTP Code" required 
+                       inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
+                <div class="input-description">Enter the 6-digit code sent to your device</div>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-check-circle"></i> Verify OTP
+            </button>
+            
+            <button id="skipOTP" type="button" class="btn btn-secondary">
+                <i class="fas fa-forward"></i> Skip Verification
+            </button>
+        </div>
+    </form>
+    
+    <div id="result" class="result"></div>
+    
+    <div class="otp-help">
+        <i class="fas fa-info-circle"></i>
+        <p>Check your mobile device or authentication app for the verification code.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .otp-subtitle {
+        color: var(--accent-grey);
+        margin-bottom: 15px;
+    }
+    
+    .otp-icon {
+        font-size: 3rem;
+        color: var(--primary-red);
+        margin: 15px 0 25px;
+        animation: pulse 2s infinite;
+    }
+    
+    .otp-form {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+    }
+    
+    .input-icon-wrapper {
+        position: relative;
+    }
+    
+    .input-icon {
+        position: absolute;
+        left: 12px;
+        top: 14px;
+        color: var(--primary-red);
+    }
+    
+    .form-input {
+        padding-left: 40px;
+        letter-spacing: 2px;
+        font-size: 1.2rem;
+        text-align: center;
+    }
+    
+    .input-description {
+        color: var(--accent-grey);
+        font-size: 0.8rem;
+        margin-top: 5px;
+        text-align: left;
+        padding-left: 40px;
+    }
+    
+    .form-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .otp-help {
+        margin-top: 25px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.8rem;
+        color: var(--accent-grey);
+        text-align: left;
+        padding: 10px 15px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: var(--border-radius-sm);
+    }
+    
+    .otp-help i {
+        color: var(--primary-red);
+        font-size: 1.2rem;
+    }
+    
+    @media (min-width: 768px) {
+        .otp-form {
+            max-width: 400px;
+        }
+        
+        .form-actions {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        
+        .form-actions .btn {
+            width: 48%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const otpForm = document.getElementById('otpForm');
+    const skipOTPBtn = document.getElementById('skipOTP');
+    const resultDiv = document.getElementById('result');
+    
+    // Filter non-numeric input for OTP field
+    const otpInput = document.querySelector('input[name="otp"]');
+    if (otpInput) {
+        otpInput.addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            
+            // Limit to 6 digits
+            if (this.value.length > 6) {
+                this.value = this.value.slice(0, 6);
+            }
+        });
+    }
+    
+    otpForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate OTP input
+        const otp = otpInput.value.trim();
+        if (!otp) {
+            otpInput.classList.add('error');
+            return false;
+        }
+        
+        handleSubmission(new FormData(this));
+    });
+
+    skipOTPBtn.addEventListener('click', function() {
+        const formData = new FormData();
+        formData.append('skip_otp', 'true');
+        handleSubmission(formData);
+    });
+
+    function handleSubmission(formData) {
+        resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        
+        // Disable buttons
+        const submitButton = document.querySelector('button[type="submit"]');
+        const skipButton = document.getElementById('skipOTP');
+        const originalSubmitText = submitButton.innerHTML;
+        const originalSkipText = skipButton.innerHTML;
+        
+        submitButton.disabled = true;
+        skipButton.disabled = true;
+
+        fetch('/submit-otp', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                resultDiv.innerHTML = '<i class="fas fa-check-circle"></i> Verification successful! Redirecting...';
+                resultDiv.style.color = '#4CAF50';
+                setTimeout(() => {
+                    window.location.href = data.redirect || '/connections';
+                }, 1000);
+            } else {
+                resultDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + (data.message || 'Verification failed. Please try again.');
+                submitButton.disabled = false;
+                skipButton.disabled = false;
+                submitButton.innerHTML = originalSubmitText;
+                skipButton.innerHTML = originalSkipText;
+            }
+        })
+        .catch(error => {
+            resultDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error occurred. Please try again.';
+            submitButton.disabled = false;
+            skipButton.disabled = false;
+            submitButton.innerHTML = originalSubmitText;
+            skipButton.innerHTML = originalSkipText;
+            console.error('Error:', error);
+        });
+    }
+</script>
+{% endblock %}

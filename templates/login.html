@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Linkify{% endblock %}
+
+{% block content %}
+<div class="card">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flashes prominent-flash">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <h2 class="card-title">Login</h2>
+    <p class="login-subtitle">Enter your LinkedIn credentials</p>
+    
+    <form id="loginForm" class="login-form">
+        <div class="form-group">
+            <div class="input-icon-wrapper">
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="email" name="username" class="form-input" placeholder="LinkedIn Email" required
+                       autocomplete="email">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="input-icon-wrapper">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" name="password" class="form-input" placeholder="Password" required
+                       autocomplete="current-password">
+                <button type="button" id="togglePassword" class="toggle-password">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+        </div>
+    </form>
+    
+    <div id="result" class="result"></div>
+    
+    <div class="security-note">
+        <i class="fas fa-shield-alt"></i>
+        <p>Your credentials are securely stored locally and used only to access your LinkedIn account.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .prominent-flash {
+        margin-bottom: 18px;
+        text-align: center;
+    }
+    .flash {
+        display: inline-block;
+        padding: 12px 28px;
+        border-radius: 32px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        background: linear-gradient(90deg, #ff512f 0%, #e50914 100%);
+        color: #fff;
+        box-shadow: 0 2px 12px rgba(229, 9, 20, 0.08);
+        border: none;
+    }
+    .flash-info {
+        background: linear-gradient(90deg, #2196f3 0%, #21cbf3 100%);
+    }
+    .flash-warning {
+        background: linear-gradient(90deg, #ff9800 0%, #ff512f 100%);
+    }
+    .flash-error {
+        background: linear-gradient(90deg, #e50914 0%, #b71c1c 100%);
+    }
+    .login-subtitle {
+        color: var(--accent-grey);
+        margin-bottom: 25px;
+    }
+    .login-form {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+    }
+    .input-icon-wrapper {
+        position: relative;
+    }
+    .input-icon {
+        position: absolute;
+        left: 12px;
+        top: 14px;
+        color: var(--primary-red);
+    }
+    .form-input {
+        padding-left: 40px;
+    }
+    .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        background: transparent;
+        border: none;
+        color: var(--accent-grey);
+        cursor: pointer;
+    }
+    .security-note {
+        margin-top: 25px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.8rem;
+        color: var(--accent-grey);
+        text-align: left;
+        padding: 10px 15px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: var(--border-radius-sm);
+    }
+    .security-note i {
+        color: var(--primary-red);
+        font-size: 1.2rem;
+    }
+    @media (min-width: 768px) {
+        .login-form {
+            max-width: 400px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+{{ super() }}
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Client-side validation
+        const email = this.querySelector('input[name="username"]');
+        const password = this.querySelector('input[name="password"]');
+        let isValid = true;
+        
+        if (!email.value.trim()) {
+            isValid = false;
+            email.classList.add('error');
+        } else {
+            email.classList.remove('error');
+        }
+        
+        if (!password.value.trim()) {
+            isValid = false;
+            password.classList.add('error');
+        } else {
+            password.classList.remove('error');
+        }
+        
+        if (!isValid) {
+            return false;
+        }
+        
+        const formData = new FormData(this);
+        const resultDiv = document.getElementById('result');
+        resultDiv.textContent = 'Logging in...';
+        
+        // Disable button and show loading state
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalText = submitButton.innerHTML;
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+        
+        fetch('/submit-password', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                resultDiv.innerHTML = '<i class="fas fa-check-circle"></i> Login successful! Redirecting...';
+                resultDiv.style.color = '#4CAF50';
+                setTimeout(() => {
+                    window.location.href = data.redirect || '/connections';
+                }, 1500);
+            } else {
+                resultDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + (data.message || 'Login failed. Please check your credentials.');
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalText;
+            }
+        })
+        .catch(error => {
+            resultDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> An error occurred. Please try again.';
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalText;
+            console.error('Error:', error);
+        });
+    });
+</script>
+{% endblock %}
