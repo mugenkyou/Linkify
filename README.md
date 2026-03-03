@@ -1,7 +1,7 @@
 <div align="center">
 
 # 🔗 Linkify
-
+ 
 ### LinkedIn Connection Automation Tool
 
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
