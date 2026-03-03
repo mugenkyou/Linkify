@@ -229,24 +229,24 @@ The application is configured for one-click deployment on Render:
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
-We welcome contributions! Here's how you can help:
+Contributions are welcome! To contribute to this project:
 
-1. **🍴 Fork the repository**
-2. **🌿 Create a feature branch**
+1. **Fork the repository**
+2. **Create a feature branch**
    ```bash
    git checkout -b feature/AmazingFeature
    ```
-3. **💾 Commit your changes**
+3. **Commit your changes**
    ```bash
    git commit -m 'Add some AmazingFeature'
    ```
-4. **📤 Push to the branch**
+4. **Push to the branch**
    ```bash
    git push origin feature/AmazingFeature
    ```
-5. **🎉 Open a Pull Request**
+5. **Open a Pull Request**
 
 ### Development Setup
 
@@ -269,31 +269,31 @@ python app.py
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 📞 Contact
+## Author
 
 **Sachin Patel**
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/sachinskyte/)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=for-the-badge&logo=github)](https://github.com/mugenkyou)
+- LinkedIn: [linkedin.com/in/sachinskyte](https://www.linkedin.com/in/sachinskyte/)
+- GitHub: [github.com/mugenkyou](https://github.com/mugenkyou)
+
+---
+
+## Links
+
+- **Live Demo**: [https://linkify-mjyp.onrender.com/](https://linkify-mjyp.onrender.com/)
+- **Repository**: [https://github.com/mugenkyou/Linkify](https://github.com/mugenkyou/Linkify)
+- **Report Issues**: [https://github.com/mugenkyou/Linkify/issues](https://github.com/mugenkyou/Linkify/issues)
 
 ---
 
 <div align="center">
 
-### ⭐ Star this repository if you find it helpful!
-
-**[🌐 Visit Live Demo](https://linkify-mjyp.onrender.com/)** • **[📖 View on GitHub](https://github.com/mugenkyou/Linkify)**
-
-Made with ❤️ by Sachin Patel
+*Built with Flask and Selenium for secure LinkedIn automation*
 
 </div>
-
----
-
-_Built with modern web technologies and best practices for secure, scalable automation._
