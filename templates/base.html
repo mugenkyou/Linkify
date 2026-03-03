@@ -1,151 +1,194 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Linkify - LinkedIn Automation{% endblock %}</title>
-    
+
     <!-- Favicon -->
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='favicon.ico') }}"
+      type="image/x-icon"
+    />
+
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
     <!-- Main CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+
     <!-- Meta tags for better SEO and social sharing -->
-    <meta name="description" content="Automate your LinkedIn connections with Linkify - the secure and efficient LinkedIn automation tool">
-    <meta name="keywords" content="LinkedIn, automation, connections, networking, professional">
-    <meta property="og:title" content="Linkify - LinkedIn Automation Tool">
-    <meta property="og:description" content="Automate your LinkedIn connections securely and efficiently">
-    <meta property="og:type" content="website">
-    <meta name="theme-color" content="#e50914">
-    
+    <meta
+      name="description"
+      content="Automate your LinkedIn connections with Linkify - the secure and efficient LinkedIn automation tool"
+    />
+    <meta
+      name="keywords"
+      content="LinkedIn, automation, connections, networking, professional"
+    />
+    <meta property="og:title" content="Linkify - LinkedIn Automation Tool" />
+    <meta
+      property="og:description"
+      content="Automate your LinkedIn connections securely and efficiently"
+    />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#e50914" />
+
     {% block extra_css %}{% endblock %}
-</head>
-<body>
+  </head>
+  <body>
     <nav class="navbar">
-        <div class="container-nav">
-            <a href="/" class="logo">
-                <i class="fab fa-linkedin logo-icon"></i> LINKIFY
-            </a>
-            <div class="nav-links">
-                <a href="/" class="nav-link">Home</a>
-                <a href="/login" class="nav-link">Login</a>
-                <a href="/connections" class="nav-link">Connections</a>
-                {% if session['username'] %}
-                    <button id="deleteLocalDataBtn" class="nav-link nav-btn">Delete Data & logout</button>
-                {% endif %}
-            </div>
+      <div class="container-nav">
+        <a href="/" class="logo">
+          <i class="fab fa-linkedin logo-icon"></i> LINKIFY
+        </a>
+        <div class="nav-links">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/login" class="nav-link">Login</a>
+          <a href="/connections" class="nav-link">Connections</a>
+          {% if session['username'] %}
+          <button id="deleteLocalDataBtn" class="nav-link nav-btn">
+            Delete Data & logout
+          </button>
+          {% endif %}
         </div>
+      </div>
     </nav>
-    
-    <div class="container">
-        {% block content %}{% endblock %}
-    </div>
-    
+
+    <div class="container">{% block content %}{% endblock %}</div>
+
     <!-- Minimal Footer -->
     <footer class="footer minimal-footer">
-        <div class="footer-content-minimal">
-            <a href="https://github.com/sachinskyte/linkify.git" class="footer-btn" target="_blank" rel="noopener" title="GitHub">
-                <i class="fab fa-github"></i> GitHub
-            </a>
-            <a href="https://www.linkedin.com/in/sachinskyte/" class="footer-btn" target="_blank" rel="noopener" title="LinkedIn">
-                <i class="fab fa-linkedin"></i> LinkedIn
-            </a>
-            <span class="footer-madeby">Made by Sachin Patel</span>
-        </div>
+      <div class="footer-content-minimal">
+        <a
+          href="https://github.com/mugenkyou/Linkify"
+          class="footer-btn"
+          target="_blank"
+          rel="noopener"
+          title="GitHub"
+        >
+          <i class="fab fa-github"></i> GitHub
+        </a>
+        <a
+          href="https://www.linkedin.com/in/sachinskyte/"
+          class="footer-btn"
+          target="_blank"
+          rel="noopener"
+          title="LinkedIn"
+        >
+          <i class="fab fa-linkedin"></i> LinkedIn
+        </a>
+        <span class="footer-madeby">Made by Sachin Patel</span>
+      </div>
     </footer>
     <style>
-        .minimal-footer {
-            background: transparent;
-            border-top: 1px solid rgba(229, 9, 20, 0.08);
-            padding: 18px 0 8px 0;
-            text-align: center;
-        }
-        .footer-content-minimal {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-        .footer-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(90deg, #e50914 0%, #ff512f 100%);
-            color: #fff;
-            padding: 8px 20px;
-            border-radius: 24px;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: background 0.2s, box-shadow 0.2s;
-            box-shadow: 0 2px 8px rgba(229, 9, 20, 0.08);
-        }
-        .footer-btn:hover {
-            background: linear-gradient(90deg, #ff512f 0%, #e50914 100%);
-            color: #fff;
-        }
-        .footer-btn i {
-            font-size: 1.2rem;
-        }
-        .footer-madeby {
-            color: var(--accent-grey);
-            font-size: 1rem;
-            font-weight: 500;
-        }
-        .nav-btn {
-            background: linear-gradient(90deg, #e50914 0%, #ff512f 100%);
-            color: #fff;
-            border: none;
-            border-radius: 20px;
-            padding: 6px 18px;
-            margin-left: 10px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.2s, box-shadow 0.2s;
-            box-shadow: 0 2px 8px rgba(229, 9, 20, 0.08);
-        }
-        .nav-btn:hover {
-            background: linear-gradient(90deg, #ff512f 0%, #e50914 100%);
-        }
+      .minimal-footer {
+        background: transparent;
+        border-top: 1px solid rgba(229, 9, 20, 0.08);
+        padding: 18px 0 8px 0;
+        text-align: center;
+      }
+      .footer-content-minimal {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+      .footer-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(90deg, #e50914 0%, #ff512f 100%);
+        color: #fff;
+        padding: 8px 20px;
+        border-radius: 24px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        transition:
+          background 0.2s,
+          box-shadow 0.2s;
+        box-shadow: 0 2px 8px rgba(229, 9, 20, 0.08);
+      }
+      .footer-btn:hover {
+        background: linear-gradient(90deg, #ff512f 0%, #e50914 100%);
+        color: #fff;
+      }
+      .footer-btn i {
+        font-size: 1.2rem;
+      }
+      .footer-madeby {
+        color: var(--accent-grey);
+        font-size: 1rem;
+        font-weight: 500;
+      }
+      .nav-btn {
+        background: linear-gradient(90deg, #e50914 0%, #ff512f 100%);
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        padding: 6px 18px;
+        margin-left: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          box-shadow 0.2s;
+        box-shadow: 0 2px 8px rgba(229, 9, 20, 0.08);
+      }
+      .nav-btn:hover {
+        background: linear-gradient(90deg, #ff512f 0%, #e50914 100%);
+      }
     </style>
-    
+
     <!-- Main JavaScript -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    
+
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var deleteBtn = document.getElementById('deleteLocalDataBtn');
+      document.addEventListener("DOMContentLoaded", function () {
+        var deleteBtn = document.getElementById("deleteLocalDataBtn");
         if (deleteBtn) {
-            deleteBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                if (!confirm('Are you sure you want to delete all local data (cookies) and log out? This cannot be undone.')) return;
-                fetch('/delete-local-data', {
-                    method: 'POST',
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.href = '/login';
-                    } else {
-                        alert(data.message || 'Failed to delete local data.');
-                    }
-                })
-                .catch(() => alert('Failed to delete local data.'));
-            });
+          deleteBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            if (
+              !confirm(
+                "Are you sure you want to delete all local data (cookies) and log out? This cannot be undone.",
+              )
+            )
+              return;
+            fetch("/delete-local-data", {
+              method: "POST",
+              headers: { "X-Requested-With": "XMLHttpRequest" },
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.success) {
+                  window.location.href = "/login";
+                } else {
+                  alert(data.message || "Failed to delete local data.");
+                }
+              })
+              .catch(() => alert("Failed to delete local data."));
+          });
         }
-    });
+      });
     </script>
-    
+
     {% block extra_js %}{% endblock %}
-</body>
-</html> 
+  </body>
+</html>

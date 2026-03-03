@@ -1,0 +1,35 @@
+name: Deploy to Vercel on Merge
+
+# This workflow triggers when code is pushed or merged into the main branch
+# It sends a POST request to Vercel's deploy hook to trigger a new deployment
+on:
+  push:
+    branches:
+      - main
+  # Also triggers when a PR is merged into main
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  deploy:
+    # Run on the latest Ubuntu runner
+    runs-on: ubuntu-latest
+    
+    # Only deploy if:
+    # - It's a push event to main, OR
+    # - It's a pull_request event that was merged (not just closed)
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    
+    steps:
+      - name: Trigger Vercel Deployment
+        # Send a POST request to Vercel's deploy hook to trigger a new deployment
+        # NOTE: You must add the VERCEL_DEPLOY_HOOK_URL secret in GitHub:
+        # Settings → Secrets and variables → Actions → New repository secret
+        # Name: VERCEL_DEPLOY_HOOK_URL
+        # Value: Your Vercel deploy hook URL (found in Vercel Dashboard → Settings → Git → Deploy Hooks)
+        run: |
+          curl -X POST '${{ secrets.VERCEL_DEPLOY_HOOK_URL }}'
+
