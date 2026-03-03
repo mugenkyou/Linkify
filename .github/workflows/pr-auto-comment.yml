@@ -27,7 +27,7 @@ jobs:
             const matches = [...prBody.matchAll(issuePattern)];
             const issueNumbers = [...new Set(matches.map(m => m[3] || m[4]).filter(Boolean))];
 
-            let allLabels = new Set(['awaiting review', 'apertre3.0']);
+            let allLabels = new Set(['awaiting review']);
             let linkedIssuesInfo = [];
 
             // Fetch labels from each linked issue
@@ -105,7 +105,7 @@ jobs:
             }
 
             commentBody += `---\n\n`;
-            commentBody += `Our team will review your submission shortly. We appreciate your effort in improving the platform for students.`;
+            commentBody += `Our team will review your submission shortly. We appreciate your effort in improving Linkify.`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
@@ -133,7 +133,7 @@ jobs:
               `- 👀 Watch for updates and participate in discussions\n` +
               `- 🔄 Continue contributing to enhance the platform\n\n` +
               `---\n\n` +
-              `We value your commitment to improving educational technology and look forward to your continued involvement.`;
+              `We value your commitment to improving Linkify and look forward to your continued involvement.`;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,

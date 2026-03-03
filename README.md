@@ -53,6 +53,7 @@
 <td width="50%">
 
 ### 🔐 Authentication
+
 - LinkedIn login with OTP support
 - Session cookie persistence
 - Secure credential handling
@@ -62,6 +63,7 @@
 <td width="50%">
 
 ### 🤖 Automation
+
 - Batch accept connections
 - Real-time progress tracking
 - Smart scrolling mechanism
@@ -73,6 +75,7 @@
 <td width="50%">
 
 ### 📊 Monitoring
+
 - Live connection statistics
 - Activity logging
 - Request status tracking
@@ -82,6 +85,7 @@
 <td width="50%">
 
 ### 🎨 User Experience
+
 - Responsive mobile design
 - Intuitive dashboard
 - Clean, modern interface
@@ -95,13 +99,13 @@
 
 ## 🛠 Tech Stack
 
-| Category | Technology |
-|----------|-----------|
-| **Backend** | Python 3.11+, Flask 2.3.2 |
-| **Frontend** | HTML5, CSS3, JavaScript |
+| Category       | Technology                |
+| -------------- | ------------------------- |
+| **Backend**    | Python 3.11+, Flask 2.3.2 |
+| **Frontend**   | HTML5, CSS3, JavaScript   |
 | **Automation** | Selenium WebDriver 4.11.2 |
-| **Deployment** | Render Cloud Platform |
-| **Server** | Gunicorn WSGI Server |
+| **Deployment** | Render Cloud Platform     |
+| **Server**     | Gunicorn WSGI Server      |
 
 ---
 
@@ -134,7 +138,7 @@
    ```
 
 4. **Access the application**
-   
+
    Open your browser and navigate to `http://127.0.0.1:5000`
 
 ---
@@ -145,7 +149,6 @@
 
 1. **🌐 Launch Application**
    - Open your browser and navigate to the application URL
-   
 2. **🔑 Login to LinkedIn**
    - Click on "Login" in the navigation
    - Enter your LinkedIn credentials
@@ -212,13 +215,13 @@ The application is configured for one-click deployment on Render:
 
 ## 🔒 Security & Privacy
 
-| Aspect | Implementation |
-|--------|---------------|
-| **Data Storage** | Session cookies stored locally, no cloud database |
-| **Data Collection** | Zero data collection - no analytics or tracking |
-| **Session Security** | Secure session management with HTTP security headers |
-| **Credential Handling** | Credentials used only for authentication, not stored |
-| **Privacy** | All processing happens server-side, no third-party services |
+| Aspect                  | Implementation                                              |
+| ----------------------- | ----------------------------------------------------------- |
+| **Data Storage**        | Session cookies stored locally, no cloud database           |
+| **Data Collection**     | Zero data collection - no analytics or tracking             |
+| **Session Security**    | Secure session management with HTTP security headers        |
+| **Credential Handling** | Credentials used only for authentication, not stored        |
+| **Privacy**             | All processing happens server-side, no third-party services |
 
 ### ⚠️ Important Notes
 
@@ -294,6 +297,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 <div align="center">
 
-*Built with Flask and Selenium for secure LinkedIn automation*
+_Built with Flask and Selenium for secure LinkedIn automation_
 
 </div>
