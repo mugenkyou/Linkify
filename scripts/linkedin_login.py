@@ -7,7 +7,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 import time
 import logging
-import pickle
+import json
 import os
 
 # Configure logging
@@ -252,11 +252,11 @@ def submit_otp():
                 
             cookie_path = os.path.join(
                 cookie_dir, 
-                f"linkedin_cookies_{session['username']}.pkl"
+                f"linkedin_cookies_{session['username']}.json"
             )
             
-            with open(cookie_path, 'wb') as file:
-                pickle.dump(cookies, file)
+            with open(cookie_path, 'w') as file:
+                json.dump(cookies, file)
                 
             return jsonify({'success': True})
             

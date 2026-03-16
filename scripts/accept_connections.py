@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
 import time
 import logging
-import pickle
+import json
 import sys
 
 def accept_connections():
@@ -26,8 +26,8 @@ def accept_connections():
         # Load cookies from file
         try:
             driver.get('https://www.linkedin.com')
-            with open('linkedin_cookies.pkl', 'rb') as file:
-                cookies = pickle.load(file)
+            with open('linkedin_cookies.json', 'r') as file:
+                cookies = json.load(file)
                 for cookie in cookies:
                     driver.add_cookie(cookie)
             logging.info("Cookies loaded successfully")
