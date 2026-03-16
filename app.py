@@ -7,7 +7,7 @@ from selenium.common.exceptions import TimeoutException, ElementClickIntercepted
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_from_directory, flash
 import time
 import logging
-import pickle
+import json
 import os
 import shutil
 
@@ -93,7 +93,7 @@ def process_connections():
     
     try:
         driver = init_driver()
-        cookie_path = os.path.join('cookies', f"linkedin_cookies_{session['username']}.pkl")
+        cookie_path = os.path.join('cookies', f"linkedin_cookies_{session['username']}.json")
         
         if not os.path.exists(cookie_path):
             return jsonify({'success': False, 'message': 'No valid session found. Please login again.'})
@@ -118,8 +118,8 @@ def accept_connections(driver, cookie_path):
     try:
         # Load cookies
         driver.get('https://www.linkedin.com')
-        with open(cookie_path, 'rb') as file:
-            cookies = pickle.load(file)
+        with open(cookie_path, 'r') as file:
+            cookies = json.load(file)
             for cookie in cookies:
                 driver.add_cookie(cookie)
         
@@ -233,9 +233,9 @@ def submit_password():
         if not os.path.exists(cookie_dir):
             os.makedirs(cookie_dir)
         
-        cookie_path = os.path.join(cookie_dir, f"linkedin_cookies_{username}.pkl")
-        with open(cookie_path, 'wb') as file:
-            pickle.dump(driver.get_cookies(), file)
+        cookie_path = os.path.join(cookie_dir, f"linkedin_cookies_{username}.json")
+        with open(cookie_path, 'w') as file:
+            json.dump(driver.get_cookies(), file)
         
         return jsonify({'success': True, 'redirect': '/connections'})
 
@@ -285,9 +285,9 @@ def submit_otp():
         if not os.path.exists(cookie_dir):
             os.makedirs(cookie_dir)
             
-        cookie_path = os.path.join(cookie_dir, f"linkedin_cookies_{session['username']}.pkl")
-        with open(cookie_path, 'wb') as file:
-            pickle.dump(cookies, file)
+        cookie_path = os.path.join(cookie_dir, f"linkedin_cookies_{session['username']}.json")
+        with open(cookie_path, 'w') as file:
+            json.dump(cookies, file)
         
         return jsonify({'success': True, 'redirect': '/connections'})
 
@@ -308,7 +308,7 @@ def check_session():
         return jsonify({'valid': False})
         
     # Check if cookie file exists
-    cookie_path = os.path.join('cookies', f"linkedin_cookies_{session['username']}.pkl")
+    cookie_path = os.path.join('cookies', f"linkedin_cookies_{session['username']}.json")
     if not os.path.exists(cookie_path):
         return jsonify({'valid': False})
         
@@ -321,7 +321,7 @@ def connection_stats():
         return jsonify({'success': False, 'message': 'Not logged in'})
         
     try:
-        cookie_path = os.path.join('cookies', f"linkedin_cookies_{session['username']}.pkl")
+        cookie_path = os.path.join('cookies', f"linkedin_cookies_{session['username']}.json")
         if not os.path.exists(cookie_path):
             return jsonify({'success': False, 'message': 'No valid session found'})
             
@@ -330,8 +330,8 @@ def connection_stats():
         try:
             # Load cookies
             driver.get('https://www.linkedin.com')
-            with open(cookie_path, 'rb') as file:
-                cookies = pickle.load(file)
+            with open(cookie_path, 'r') as file:
+                cookies = json.load(file)
                 for cookie in cookies:
                     driver.add_cookie(cookie)
             
@@ -419,7 +419,7 @@ def delete_local_data():
         errors = []
         if os.path.exists(cookies_dir):
             for filename in os.listdir(cookies_dir):
-                if not filename.endswith('.pkl'):
+                if not filename.endswith('.json'):
                     continue
                 file_path = os.path.join(cookies_dir, filename)
                 try:
